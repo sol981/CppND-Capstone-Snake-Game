@@ -16,7 +16,18 @@ int main() {
   Game game(kGridWidth, kGridHeight);
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
+
+
   std::cout << "Score: " << game.GetScore() << "\n";
   std::cout << "Size: " << game.GetSize() << "\n";
+  HighScore h;
+  if(game.GetScore() >= h.get() && game.GetScore() > 0)
+  {
+    std::cout<<"you get high score, please enter your name:\n";
+    std::string name;
+    std::cin >> name;
+    h.set(name, game.GetScore());
+  }
+
   return 0;
 }
