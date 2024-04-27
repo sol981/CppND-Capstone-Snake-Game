@@ -2,6 +2,12 @@
 #include <cmath>
 #include <iostream>
 
+// Snake::Snake(const Snake& snake){}
+// Snake& Snake::operator=(const Snake& snake){return *this;}
+// Snake::Snake(Snake&& snake){}
+// Snake& Snake::operator=(Snake&& snake){ return *this;}
+// Snake::~Snake(){}
+
 void Snake::Update() {
   SDL_Point prev_cell{
       static_cast<int>(head_x),

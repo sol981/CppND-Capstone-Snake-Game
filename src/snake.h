@@ -13,6 +13,12 @@ class Snake {
         grid_height(grid_height),
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
+  
+  // Snake(const Snake& snake);
+  // Snake& operator=(const Snake& snake);
+  // Snake(Snake&& snake);
+  // Snake& operator=(Snake&& snake);
+  // ~Snake();
 
   void Update();
 

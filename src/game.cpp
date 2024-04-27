@@ -25,7 +25,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, fd);
 
     frame_end = SDL_GetTicks();
 
@@ -58,15 +58,27 @@ void Game::PlaceFood() {
     // Check that the location is not occupied by a snake item before placing
     // food.
     if (!snake.SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
+      fd.fruit.x = x;
+      fd.fruit.y = y;
+      if(score % 5 == 0 && score != 0) // use time or lenght of snake, but which snakes ? // multiple fruit ?
+      {
+        fd.type = TYPE::BIG;
+      }
+      else 
+      {
+        fd.type = TYPE::SMALL;
+      }
+      
       return;
     }
   }
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake.alive) 
+  {
+    return;
+  }
 
   snake.Update();
 
@@ -74,12 +86,17 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
-    score++;
+  if (fd.fruit.x == new_x && fd.fruit.y == new_y) {
+    if(fd.type == TYPE::BIG)
+      score+=5;
+    else
+      ++score;
+      
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    // snake.speed += 0.02;
+    // snake.speed = 0.02;
   }
 }
 
