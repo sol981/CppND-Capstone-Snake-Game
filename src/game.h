@@ -10,56 +10,74 @@
 #include <sstream>
 #include <iostream>
 #include "gameobject.h"
+#include <mutex>
+#include<bits/stdc++.h>
+#include <filesystem>
 
-class HighScore {
+class HighScore
+{
 public:
-  HighScore()
-  {
-    file.open("highscore.txt", std::ios::in | std::ios::out | std::ios::app);
-    if (!file.is_open()) {
-      std::cout << "can not open file\n";
-    }
-  }
-  void openFile() {
-    file.open("highscore.txt", std::ios::in | std::ios::out);
-    if (!file.is_open()) {
-      std::cout << "can not open file\n";
-    }
-  }
-
-  void closeFile() {
-    if (file.is_open()) {
-      file.close();
-    }
-  }
-
-  void set(std::string name, int score) {
-    openFile(); // Open the file before writing
-    if (file.is_open()) {
-      file << name << " " << score << std::endl;
-    }
-    closeFile(); // Close the file after writing
-  }
-
-  int get() {
-    openFile(); // Open the file before reading
-    int highScore = 0;
-    std::string line, token;
-    if (file.is_open()) {
-      while (std::getline(file, line)) {
-        std::stringstream ll(line);
-        int currentScore;
-        if (ll >> token >> currentScore) {
-          highScore = std::max(highScore, currentScore); // Update high score
+    HighScore() {
+        if (!std::filesystem::exists("highscore.txt")) {
+            std::ofstream out("highscore.txt");
+            out.close();
         }
-      }
+        file.open("highscore.txt");
     }
-    closeFile(); // Close the file after reading
-    return highScore;
-  }
 
+    HighScore(std::string fileName) {
+        if (!std::filesystem::exists(fileName)) {
+            std::ofstream out(fileName);
+            out.close();
+        }
+        file.open(fileName);
+    }
+    ~HighScore() {
+        file.close();
+    }
+    
+    void setScore(std::string name, int score)
+    {
+        std::lock_guard<std::mutex> lk(mt);
+        if(file.is_open())
+        {
+            std::string str = name + " " + std::to_string(score) + "\n";
+            file << str;
+        }
+        else
+        {
+            std::cout << "can not open file to set score\n";
+        }
+    }
+
+    int getScore()
+    {
+        std::lock_guard<std::mutex> lk(mt);
+        file.seekg(0, std::ios::beg);
+        std::string line;
+        if(file.is_open())
+        {
+            while(std::getline(file, line))
+            {
+                std::string name;
+                int score{0};
+                std::stringstream stream(line);
+                if(stream >> name >> score)
+                    players.push_back(std::make_pair(name,score));
+            }
+        }
+        else
+        {
+            std::cout << "fail to get score, can not open file\n";
+        }
+        // TODO: improve for multiple top players
+        return players.back().second; 
+    }
+
+    std::vector<std::pair<std::string, int>> players;
 private:
-  std::fstream file; // File stream
+    std::fstream file;
+    std::mutex mt;
 };
 
 class Game {
