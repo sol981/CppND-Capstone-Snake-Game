@@ -2,11 +2,11 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
+Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacle*> obs)
     : snake(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
+      random_h(0, static_cast<int>(grid_height - 1)), obs(obs) {
   PlaceFood();
 }
 
@@ -25,7 +25,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, fd);
+    renderer.Render(snake, fd, obs);
 
     frame_end = SDL_GetTicks();
 
@@ -52,6 +52,14 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::PlaceFood() {
   int x, y;
+  if(obs[0]->ObstacleCell(329,329))
+  {
+    std::cout << "yeyeyeye \n";
+  }
+  else{
+    std::cout << "outside \n";
+  }
+  
   while (true) {
     x = random_w(engine);
     y = random_h(engine);

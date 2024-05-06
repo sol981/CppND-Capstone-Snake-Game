@@ -12,7 +12,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Snake const snake, food const &fd);
+  void Render(Snake const snake, food const &fd, std::vector<Obstacle*> obs);
   void UpdateWindowTitle(int score, int fps);
 
  private:
