@@ -60,7 +60,7 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y)) {
       fd.fruit.x = x;
       fd.fruit.y = y;
-      if(score % 5 == 0 && score != 0) // use time or lenght of snake, but which snakes ? // multiple fruit ?
+      if(score % 5 == 0 && score != 0 && fd.type == TYPE::SMALL) // use time or lenght of snake, but which snakes ? // multiple fruit ?
       {
         fd.type = TYPE::BIG;
       }

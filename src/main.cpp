@@ -21,13 +21,27 @@ int main() {
   std::cout << "Score: " << game.GetScore() << "\n";
   std::cout << "Size: " << game.GetSize() << "\n";
   HighScore h;
-  if(game.GetScore() >= h.get() && game.GetScore() > 0)
-  {
+  // if(game.GetScore() >= h.get() && game.GetScore() > 0)
+  // int saveScore = h.get();
+  
+  // if(saveScore <= game.GetScore() && game.GetScore() > 0)
+  // {
+  //   std::cout << "true: \ngame now: " << game.GetScore() << "\n";
+  //   std::cout << "in file: " << saveScore << "\n";
     std::cout<<"you get high score, please enter your name:\n";
     std::string name;
-    std::cin >> name;
-    h.set(name, game.GetScore());
-  }
+    // name is string without any space
+    // std::getline(std::cin, name);
+    // h.setScore(name, game.GetScore());
 
+    std::cout << "get score" << h.getScore() << "\n";
+    std::cout << "name: " << h.players.back().first  << "score " << h.players.back().second;
+
+  // }
+  // else
+  // {
+  //   std::cout << " you are not in high score\n";
+  // }
+  h.getScore();
   return 0;
 }
