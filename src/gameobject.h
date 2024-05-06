@@ -26,10 +26,10 @@ struct Obstacle
   }
 
   bool ObstacleCell(int x, int y) {
-    if ((ob.x <= x && x <= (ob.x + ob.w))  && (ob.y <= y && y <= (ob.y + ob.h))) {
+    int kW = 20;
+    if ((ob.x <= x * kW && x * kW <= (ob.x + ob.w))  && (ob.y <= y * kW && y * kW <= (ob.y + ob.h))) {
       return true;
     }
-
     return false;
   }
   SDL_Rect ob;

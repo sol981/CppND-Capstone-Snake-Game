@@ -10,10 +10,11 @@ int main() {
   constexpr std::size_t kScreenHeight{640};
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
+  int kW = kScreenWidth/kGridWidth;
 
   std::vector<Obstacle*> obs;
   // obs.emplace_back(new Obstacle(0,0, 100,100));
-  obs.emplace_back(new Obstacle(330,330, 100,100));
+  obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;

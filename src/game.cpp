@@ -52,20 +52,16 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::PlaceFood() {
   int x, y;
-  if(obs[0]->ObstacleCell(329,329))
-  {
-    std::cout << "yeyeyeye \n";
-  }
-  else{
-    std::cout << "outside \n";
-  }
   
+
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
-    // Check that the location is not occupied by a snake item before placing
+    // Check that the location is not occupied by a snake item & obstacles before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if ( (!snake.SnakeCell(x, y)) && (std::all_of(obs.begin(), obs.end(), [&](const auto& ob) {
+        return !ob->ObstacleCell(x, y);})) ) 
+    {
       fd.fruit.x = x;
       fd.fruit.y = y;
       if(score % 5 == 0 && score != 0 && fd.type == TYPE::SMALL) // use time or lenght of snake, but which snakes ? // multiple fruit ?
@@ -85,6 +81,13 @@ void Game::PlaceFood() {
 void Game::Update() {
   if (!snake.alive) 
   {
+    return;
+  }
+  
+  // if snake hit the obstacle game is over
+  if(obs[0]->ObstacleCell(static_cast<int>(snake.head_x), static_cast<int>(snake.head_y)))
+  {
+    snake.alive = false;
     return;
   }
 
