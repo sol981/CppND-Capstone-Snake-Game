@@ -5,11 +5,25 @@
 
 class Controller {
  public:
-  void HandleInput(bool &running, Snake &snake) const;
+  virtual void HandleInput(bool &running, Snake &snake) = 0;
 
- private:
+ protected:
   void ChangeDirection(Snake &snake, Snake::Direction input,
                        Snake::Direction opposite) const;
+};
+
+class UserController : public Controller
+{
+public:
+    UserController() = default;
+    void HandleInput(bool &running, Snake &snake);
+};
+
+class ProcessController : public Controller
+{
+public:
+    ProcessController() = default;
+    virtual void HandleInput(bool &running, Snake &snake, Snake::Direction dir);
 };
 
 #endif

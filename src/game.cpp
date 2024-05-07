@@ -10,7 +10,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacl
   PlaceFood();
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer,
+void Game::Run(Controller* controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -23,7 +23,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
+    controller->HandleInput(running, snake);
     Update();
     // renderer.Render(snake, fd, obs);
     auto ren = std::async(&Renderer::Render, &renderer, snake, fd, obs);

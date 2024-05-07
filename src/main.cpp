@@ -17,11 +17,12 @@ int main() {
   obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  Controller controller;
+  auto controller = new UserController();
+
   Game game(kGridWidth, kGridHeight, obs);
   
 
-  game.Run(controller, renderer, kMsPerFrame);
+  game.Run(static_cast<Controller*> (controller) , renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
 
   std::cout << "Score: " << game.GetScore() << "\n";
