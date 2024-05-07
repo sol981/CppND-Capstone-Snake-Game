@@ -25,7 +25,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, fd, obs);
+    // renderer.Render(snake, fd, obs);
+    auto ren = std::async(&Renderer::Render, &renderer, snake, fd, obs);
 
     frame_end = SDL_GetTicks();
 
@@ -36,7 +37,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      // renderer.UpdateWindowTitle(score, frame_count);
+      auto ren_ = std::async(&Renderer::UpdateWindowTitle, &renderer, score, frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }

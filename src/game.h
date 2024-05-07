@@ -13,6 +13,8 @@
 #include <mutex>
 #include<bits/stdc++.h>
 #include <filesystem>
+#include <algorithm>
+#include <future>
 
 class HighScore
 {

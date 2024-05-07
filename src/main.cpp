@@ -40,14 +40,14 @@ int main() {
     // std::getline(std::cin, name);
     // h.setScore(name, game.GetScore());
 
-    std::cout << "get score" << h.getScore() << "\n";
-    std::cout << "name: " << h.players.back().first  << "score " << h.players.back().second;
+    // std::cout << "get score" << h.getScore() << "\n";
+    // std::cout << "name: " << h.players.back().first  << "score " << h.players.back().second;
 
   // }
   // else
   // {
   //   std::cout << " you are not in high score\n";
   // }
-  h.getScore();
+  // h.getScore();
   return 0;
 }
