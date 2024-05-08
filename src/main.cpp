@@ -23,10 +23,13 @@ int main() {
   
 
   game.Run(static_cast<Controller*> (controller) , renderer, kMsPerFrame);
+  
+  // create an other thread for other snake
+
   std::cout << "Game has terminated successfully!\n";
 
   std::cout << "Score: " << game.GetScore() << "\n";
-  std::cout << "Size: " << game.GetSize() << "\n";
+  // std::cout << "Size: " << game.GetSize() << "\n";
   HighScore h;
   // if(game.GetScore() >= h.get() && game.GetScore() > 0)
   // int saveScore = h.get();

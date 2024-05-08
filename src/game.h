@@ -88,10 +88,12 @@ class Game {
   void Run(Controller* controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
-  int GetSize() const;
+  // int GetSize() const;
 
  private:
-  Snake snake;
+  std::vector<Snake*> snake; // use unique pointer
+  // Snake snake;
+  // Snake snake2;
   food fd;
   std::vector<Obstacle*> obs;
   std::random_device dev;
