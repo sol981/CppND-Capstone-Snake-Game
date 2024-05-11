@@ -9,6 +9,8 @@
 // Snake::~Snake(){}
 
 void Snake::Update() {
+  // std::cout << "head x: " << head_x << "\n";
+  // std::cout << "head y: " << head_y << "\n";
   SDL_Point prev_cell{
       static_cast<int>(head_x),
       static_cast<int>(

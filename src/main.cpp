@@ -15,15 +15,17 @@ int main() {
   std::vector<Obstacle*> obs;
   // obs.emplace_back(new Obstacle(0,0, 100,100));
   obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
+  obs.emplace_back(new Obstacle(2 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   auto controller = new UserController();
 
   Game game(kGridWidth, kGridHeight, obs);
-  
 
   game.Run(static_cast<Controller*> (controller) , renderer, kMsPerFrame);
   
+  
+
   // create an other thread for other snake
 
   std::cout << "Game has terminated successfully!\n";

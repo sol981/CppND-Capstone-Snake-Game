@@ -16,6 +16,8 @@
 #include <algorithm>
 #include <future>
 
+enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
+
 class HighScore
 {
 public:
@@ -89,8 +91,9 @@ class Game {
            std::size_t target_frame_duration);
   int GetScore() const;
   // int GetSize() const;
-
+  void genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs);
  private:
+  std::vector<std::vector<State>> board;//(grid_height, std::vector<State>(grid_width, State::kEmpty));
   std::vector<Snake*> snake; // use unique pointer
   // Snake snake;
   // Snake snake2;
