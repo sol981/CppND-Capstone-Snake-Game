@@ -18,19 +18,18 @@ int main() {
   obs.emplace_back(new Obstacle(2 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  auto controller = new UserController();
+  // auto controller = new UserController();
+  auto controller = new ProcessController();
 
   Game game(kGridWidth, kGridHeight, obs);
 
   game.Run(static_cast<Controller*> (controller) , renderer, kMsPerFrame);
   
-  
-
   // create an other thread for other snake
 
   std::cout << "Game has terminated successfully!\n";
 
-  std::cout << "Score: " << game.GetScore() << "\n";
+  // std::cout << "Score: " << game.GetScore() << "\n";
   // std::cout << "Size: " << game.GetSize() << "\n";
   HighScore h;
   // if(game.GetScore() >= h.get() && game.GetScore() > 0)

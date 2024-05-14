@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "node.h"
 #include "snake.h"
 #include <limits>
 #include <cmath>
@@ -12,6 +11,9 @@
 #include <iostream>
 #include <vector>
 #include "SDL.h"
+#include "gameobject.h"
+#include <memory>
+#include "controller.h"
 
 // enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 // directional deltas
@@ -20,14 +22,19 @@ const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 struct Node
 {
   int h_value = std::numeric_limits<int>::max();
-  int g_value = 0;
+  // int g_value = 0;
   Node(){}
   Node(SDL_Point pos) {
-    this.pos = pos; 
+    this->pos = pos; 
   }
   Node(int x, int y) {
-    pos.x = x;
-    pos.y = y;
+    this->pos.x = x;
+    this->pos.y = y;
+  }
+  Node(int x, int y, int h) {
+    this->h_value = h;
+    this->pos.x = x;
+    this->pos.y = y;
   }
   
   SDL_Point pos;
@@ -37,30 +44,37 @@ class RoutePlanner {
   public:
     
     //init start node and end node
-    RoutePlanner(Snake& snake, int end_x, int end_y, int grid_width, int grid_height);
-    
+    RoutePlanner(std::shared_ptr<Snake> snake, int end_x, int end_y, int grid_width, int grid_height, std::vector<Obstacle*> obs);
+    // check direction
+    bool checkDirection(int x, int y);
+    Snake::Direction getDirection(const SDL_Point& start, const SDL_Point& goal, const SDL_Point& next);
+
     // check cell valid
     bool checkCellValid(int x, int y);
 
     // Add public variables or methods declarations here.
-    void AStarSearch();
+    void AStarSearch(Controller* controller, SDL_Point goal);
 
     // add neighbors to open_list
-    void AddNeighbors(Node *current_node);
+    void AddNeighbors(Node *current_node, Controller* controller);
     // caluculate h value to know how far the the node to goal
     int CalculateHValue(Node const *node);
+    int CalculateHValue(int x, int y);
     // update position of head snake & position of food
-    void update(int head_x,int head_y, int end_x, int end_y);
+    // void update(int head_x,int head_y, int end_x, int end_y);
     // sort by f then pop Node have lowest f
     Node *NextNode();
 
   private:
     // Add private variables or methods declarations here.
+    std::shared_ptr<Snake> snake;
     std::vector<Node*> open_list;
+    Controller* controller;
     Node *start_node;
     Node *end_node;
     int grid_width;
     int grid_height;
+    std::vector<Obstacle*> obs;
 };
 
 #endif

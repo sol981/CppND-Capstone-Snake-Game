@@ -6,8 +6,8 @@
 
 class Controller {
  public:
-  virtual void HandleInput(bool &running, std::shared_ptr<Snake> snake) = 0;
-
+  // virtual void HandleInput(bool &running, std::shared_ptr<Snake> snake) = 0;
+  virtual void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir) = 0;
  protected:
   void ChangeDirection(std::shared_ptr<Snake> snake, Snake::Direction input,
                        Snake::Direction opposite) const;
@@ -24,7 +24,7 @@ class ProcessController : public Controller
 {
 public:
     ProcessController() = default;
-    virtual void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir);
+    void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir);
 };
 
 #endif

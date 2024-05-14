@@ -9,32 +9,33 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacl
       random_h(0, static_cast<int>(grid_height - 1)), obs(obs) {
 
   snake.emplace_back(std::make_shared<Snake>(grid_width, grid_height));
-  genBoardGame(grid_width, grid_height, obs);
+  // genBoardGame(grid_width, grid_height, obs);
   PlaceFood();
+  router = new RoutePlanner(snake[0],fd.fruit.x, fd.fruit.y, grid_width, grid_height, obs);
 }
 
-void Game::genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs)
-{
-  board.resize(grid_height);
-  for (int i = 0; i < grid_height; ++i) {
-    board[i].resize(grid_width, State::kEmpty);
-  }
-  for(auto obstacle : obs)
-  {
-    // std::cout << "jdjdjdj\n";
-    for(int i = 0;i <= grid_height;i++)
-    {
-      for(int j = 0;j <= grid_width;j++)
-      {
-        if ((obstacle->ob.x * 0.05 <= i) && (i <= (obstacle->ob.x + obstacle->ob.w) * 0.05) &&
-            (obstacle->ob.y * 0.05 <= j) && (j <= (obstacle->ob.y + obstacle->ob.h) * 0.05)) 
-        {
-          board[j][i] = State::kObstacle;
-        }
-      }
-    }
-  }
-}
+// void Game::genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs)
+// {
+//   board.resize(grid_height);
+//   for (int i = 0; i < grid_height; ++i) {
+//     board[i].resize(grid_width, State::kEmpty);
+//   }
+//   for(auto obstacle : obs)
+//   {
+//     // std::cout << "jdjdjdj\n";
+//     for(int i = 0;i <= grid_height;i++)
+//     {
+//       for(int j = 0;j <= grid_width;j++)
+//       {
+//         if ((obstacle->ob.x * 0.05 <= i) && (i <= (obstacle->ob.x + obstacle->ob.w) * 0.05) &&
+//             (obstacle->ob.y * 0.05 <= j) && (j <= (obstacle->ob.y + obstacle->ob.h) * 0.05)) 
+//         {
+//           board[j][i] = State::kObstacle;
+//         }
+//       }
+//     }
+//   }
+// }
 
 void Game::Run(Controller* controller, Renderer &renderer,
                std::size_t target_frame_duration) {
@@ -49,7 +50,8 @@ void Game::Run(Controller* controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller->HandleInput(running, snake[0]);
+    // controller->HandleInput(running, snake[0]);
+    router->AStarSearch(controller, fd.fruit);
     // controller->HandleInput(running, *snake[1]);
     Update();
     // renderer.Render(snake, fd, obs);
@@ -83,14 +85,14 @@ void Game::Run(Controller* controller, Renderer &renderer,
 void Game::PlaceFood() {
 
   while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
+    int x = random_w(engine);
+    int y = random_h(engine);
     // Check that the location is not occupied by a snake item & obstacles before placing
     // food.
     if ( (!snake[0]->SnakeCell(x, y)) && (std::all_of(obs.begin(), obs.end(), [&](const auto& ob) {
         return !ob->ObstacleCell(x, y);})) ) 
     {
-      board[y][x] = State::kFinish;
+      // board[y][x] = State::kFinish;
       fd.fruit.x = x;
       fd.fruit.y = y;
       if(score % 5 == 0 && score != 0 && fd.type == TYPE::SMALL) // use time or lenght of snake, but which snakes ? // multiple fruit ?
