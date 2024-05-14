@@ -8,17 +8,17 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacl
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)), obs(obs) {
 
-  board.resize(grid_height);
-  for (int i = 0; i < grid_height; ++i) {
-    board[i].resize(grid_width, State::kEmpty);
-  }
-  snake.emplace_back(new Snake(grid_width, grid_height));
+  snake.emplace_back(std::make_shared<Snake>(grid_width, grid_height));
   genBoardGame(grid_width, grid_height, obs);
   PlaceFood();
 }
 
 void Game::genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs)
 {
+  board.resize(grid_height);
+  for (int i = 0; i < grid_height; ++i) {
+    board[i].resize(grid_width, State::kEmpty);
+  }
   for(auto obstacle : obs)
   {
     // std::cout << "jdjdjdj\n";
@@ -49,7 +49,7 @@ void Game::Run(Controller* controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller->HandleInput(running, *snake[0]);
+    controller->HandleInput(running, snake[0]);
     // controller->HandleInput(running, *snake[1]);
     Update();
     // renderer.Render(snake, fd, obs);
@@ -81,8 +81,6 @@ void Game::Run(Controller* controller, Renderer &renderer,
 }
 
 void Game::PlaceFood() {
-  int x, y;
-  
 
   while (true) {
     x = random_w(engine);

@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::vector<Snake*> snakes, food const &fd, std::vector<Obstacle*> obs) {
+void Renderer::Render(std::vector<std::shared_ptr<Snake>> snakes, food const &fd, std::vector<Obstacle*> obs) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;

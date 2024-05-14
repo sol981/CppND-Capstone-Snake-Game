@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "snake.h"
 #include "gameobject.h"
+#include <memory>
 
 class Renderer {
  public:
@@ -12,7 +13,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(std::vector<Snake*> snakes, food const &fd, std::vector<Obstacle*> obs);
+  void Render(std::vector<std::shared_ptr<Snake>> snakes, food const &fd, std::vector<Obstacle*> obs);
   void UpdateWindowTitle(int score, int fps);
 
  private:

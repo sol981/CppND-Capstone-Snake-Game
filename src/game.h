@@ -15,6 +15,9 @@
 #include <filesystem>
 #include <algorithm>
 #include <future>
+#include <memory>
+
+// #include "route_planner.h"
 
 enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 
@@ -94,7 +97,7 @@ class Game {
   void genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs);
  private:
   std::vector<std::vector<State>> board;//(grid_height, std::vector<State>(grid_width, State::kEmpty));
-  std::vector<Snake*> snake; // use unique pointer
+  std::vector<std::shared_ptr<Snake>> snake; // use unique pointer
   // Snake snake;
   // Snake snake2;
   food fd;
@@ -103,12 +106,12 @@ class Game {
   std::mt19937 engine;
   std::uniform_int_distribution<int> random_w;
   std::uniform_int_distribution<int> random_h;
+  int x, y;
 
   int score{0};
 
   void PlaceFood();
   void Update();
-  
 };
 
 #endif

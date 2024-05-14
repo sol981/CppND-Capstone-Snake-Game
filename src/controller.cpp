@@ -3,13 +3,13 @@
 #include "SDL.h"
 #include "snake.h"
 
-void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
+void Controller::ChangeDirection(std::shared_ptr<Snake> snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
-  if (snake.direction != opposite || snake.size == 1) snake.direction = input;
+  if (snake->direction != opposite || snake->size == 1) snake->direction = input;
   return;
 }
 
-void UserController::HandleInput(bool &running, Snake &snake) {
+void UserController::HandleInput(bool &running, std::shared_ptr<Snake> snake) {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
@@ -40,7 +40,7 @@ void UserController::HandleInput(bool &running, Snake &snake) {
   }
 }
 
-void ProcessController::HandleInput(bool &running, Snake &snake, Snake::Direction dir) {
+void ProcessController::HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir) {
   switch (dir) {
     case Snake::Direction::kUp:
       ChangeDirection(snake, Snake::Direction::kUp,
