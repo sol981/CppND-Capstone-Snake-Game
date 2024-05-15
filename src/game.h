@@ -88,10 +88,10 @@ private:
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height, std::vector<Obstacle*> obs);
+  Game(std::size_t grid_width, std::size_t grid_height, std::vector<Obstacle*> obs, LEVEL lev);
   void Run(Renderer &renderer, std::size_t target_frame_duration);
   int GetScore() const;
-  // int GetSize() const;
+  int GetSize() const;
  private:
   std::vector<std::shared_ptr<Snake>> snakes; // use unique pointer
   std::vector<std::shared_ptr<Controller>> controllers;
@@ -104,6 +104,7 @@ class Game {
   std::uniform_int_distribution<int> random_h;
   int grid_width;
   int grid_height;
+  LEVEL level;
 
   std::vector<int> scores{0,0};
 

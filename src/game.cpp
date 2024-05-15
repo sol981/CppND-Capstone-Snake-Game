@@ -2,7 +2,7 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacle*> obs)
+Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacle*> obs, LEVEL level)
     :
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
@@ -10,6 +10,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacl
       this->grid_height = grid_height;
       this->grid_width = grid_width;
       this->obs = obs;
+      this->level = level;
       // user player
       controllers.emplace_back(std::make_shared<UserController>());
       snakes.emplace_back(std::make_shared<Snake>(grid_width, grid_height));
@@ -53,9 +54,14 @@ void Game::Run(Renderer &renderer, std::size_t target_frame_duration) {
   int frame_count = 0;
   bool running = true;
 
-  // snake.emplace_back(std::make_shared<Snake>(grid_width, grid_height));
-  // snakes.emplace_back(snake);
-  // genBoardGame(grid_width, grid_height, obs);
+  if(level == LEVEL::easy)
+    snakes[0]->speed = 0.05;
+  else if(level == LEVEL::medium) {
+    snakes[0]->speed = 0.1;
+  } 
+  else if(level == LEVEL::hard) {
+    snakes[0]->speed = 0.15;
+  }
   
   while (running) {
     frame_start = SDL_GetTicks();
@@ -180,4 +186,4 @@ void Game::Update() {
 }
 
 int Game::GetScore() const { return scores[0]; }
-// int Game::GetSize() const { return snake.size; }
+int Game::GetSize() const { return snakes[0]->size; }

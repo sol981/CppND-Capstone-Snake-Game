@@ -3,6 +3,13 @@
 #include "SDL.h"
 #include <iostream>
 
+enum LEVEL
+{
+  easy,
+  medium,
+  hard,
+};
+
 enum TYPE
 {
   SMALL,

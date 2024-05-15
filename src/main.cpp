@@ -11,14 +11,18 @@ int main() {
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
   int kW = kScreenWidth/kGridWidth;
-
+  
+  int level{0};
+  std::cout << "choose level 0 - easy, 1 - medium, 2 - hard:\n";
+  std::cin >> level;
+  
   std::vector<Obstacle*> obs;
   obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
   obs.emplace_back(new Obstacle(2 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
 
-  Game game(kGridWidth, kGridHeight, obs);
+  Game game(kGridWidth, kGridHeight, obs, static_cast<LEVEL>(level));
   game.Run(renderer, kMsPerFrame);
   
   std::cout << "Game has terminated successfully!\n";
