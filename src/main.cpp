@@ -19,11 +19,13 @@ int main() {
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   // auto controller = new UserController();
-  auto controller = new ProcessController();
+  // auto controller = new ProcessController();
+  // auto snake = std::make_shared<Snake>(kGridWidth, kGridHeight);
 
   Game game(kGridWidth, kGridHeight, obs);
 
-  game.Run(static_cast<Controller*> (controller) , renderer, kMsPerFrame);
+  // game.Run(static_cast<Controller*> (controller) ,snake, renderer, kMsPerFrame);
+  game.Run(renderer, kMsPerFrame);
   
   // create an other thread for other snake
 

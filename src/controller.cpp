@@ -9,7 +9,7 @@ void Controller::ChangeDirection(std::shared_ptr<Snake> snake, Snake::Direction 
   return;
 }
 
-void UserController::HandleInput(bool &running, std::shared_ptr<Snake> snake) {
+void UserController::HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir) {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {

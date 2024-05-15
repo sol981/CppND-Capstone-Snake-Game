@@ -18,8 +18,6 @@
 #include <memory>
 #include "food_planner.h"
 
-// #include "route_planner.h"
-
 enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 
 class HighScore
@@ -91,14 +89,16 @@ private:
 class Game {
  public:
   Game(std::size_t grid_width, std::size_t grid_height, std::vector<Obstacle*> obs);
-  void Run(Controller* controller, Renderer &renderer,
-           std::size_t target_frame_duration);
+//   void Run(Controller* controller, std::shared_ptr<Snake> snake, Renderer &renderer,
+//            std::size_t target_frame_duration);
+  void Run(Renderer &renderer, std::size_t target_frame_duration);
   int GetScore() const;
   // int GetSize() const;
 //   void genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs);
  private:
 //   std::vector<std::vector<State>> board;//(grid_height, std::vector<State>(grid_width, State::kEmpty));
-  std::vector<std::shared_ptr<Snake>> snake; // use unique pointer
+  std::vector<std::shared_ptr<Snake>> snakes; // use unique pointer
+  std::vector<std::shared_ptr<Controller>> controllers;
   // Snake snake;
   // Snake snake2;
   RoutePlanner* router = nullptr;
@@ -108,8 +108,10 @@ class Game {
   std::mt19937 engine;
   std::uniform_int_distribution<int> random_w;
   std::uniform_int_distribution<int> random_h;
+  int grid_width;
+  int grid_height;
 
-  int score{0};
+  std::vector<int> scores{0,0};
 
   void PlaceFood();
   void Update();

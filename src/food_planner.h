@@ -15,7 +15,6 @@
 #include <memory>
 #include "controller.h"
 
-// enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 // directional deltas
 const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 

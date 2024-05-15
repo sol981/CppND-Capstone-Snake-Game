@@ -66,6 +66,7 @@ void Renderer::Render(std::vector<std::shared_ptr<Snake>> snakes, food const &fd
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // snake
+  bool snake_0 = true;
   for(auto snake : snakes)
   {
     // Render snake's body
@@ -79,12 +80,17 @@ void Renderer::Render(std::vector<std::shared_ptr<Snake>> snakes, food const &fd
     // Render snake's head
     block.x = static_cast<int>(snake->head_x) * block.w;
     block.y = static_cast<int>(snake->head_y) * block.h;
-    if (snake->alive) {
+    if (snake->alive && snake_0) {
       SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-    } else {
+    } 
+    else if (snake->alive) {
+      SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0x00, 0xFF);
+    }
+    else {
       SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
     }
     SDL_RenderFillRect(sdl_renderer, &block);
+    snake_0 = false;
   }
   
 
