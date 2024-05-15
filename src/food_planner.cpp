@@ -6,7 +6,6 @@
 RoutePlanner::RoutePlanner(std::shared_ptr<Snake> snake, int end_x, int end_y, int grid_width, int grid_height, std::vector<Obstacle*> obs)
 {
     this->snake = snake;
-    // this->controller = controller;
     this->grid_height = grid_height;
     this->grid_width = grid_width;
     start_node = new Node(static_cast<int>(snake->head_x), static_cast<int>(snake->head_y));
@@ -76,6 +75,7 @@ Snake::Direction RoutePlanner::getDirection(const SDL_Point& start, const SDL_Po
         return Snake::Direction::kNone;
     }
 }
+
 // check cell valid
 bool RoutePlanner::checkCellValid(int x, int y)
 {
@@ -93,6 +93,7 @@ bool RoutePlanner::checkCellValid(int x, int y)
     
   return false;
 }
+
 // caluculate h value to know how far the the node to goal
 int RoutePlanner::CalculateHValue(Node const *node)
 {
@@ -107,39 +108,28 @@ int RoutePlanner::CalculateHValue(int x, int y)
 // add neighbors to open_list
 void RoutePlanner::AddNeighbors(Node *current_node, Controller* controller)
 {
-      // Get current node's data.
+  // Get current node's data.
   int x = current_node->pos.x;
   int y = current_node->pos.y;
   SDL_Point current_point;
-//   int g = current_node->g_value;
 
   // Loop through current node's potential neighbors.
   for (int i = 0; i < 4; i++) {
     current_point.x = x + delta[i][0];
     current_point.y = y + delta[i][1];
 
-    // Check that the potential neighbor's x2 and y2 values are on the grid and not closed.
+    // Check that the potential neighbor's x and y values are on the grid and not be obstacle.
+    // add newNode to open list
     if (checkCellValid(current_point.x, current_point.y) && checkDirection(current_point.x,current_point.y)) {
         int h2 = CalculateHValue(current_point.x, current_point.y);
         auto newNode = new Node(current_point.x,current_point.y,h2);
         open_list.emplace_back(newNode);
-        // change direction
-        // delete newNode;
-        // break;
-        // return;
     }
   }
 }
 
-// update position of head snake & position of food
-// void RoutePlanner::update(Snake& Snake int end_x, int end_y)
-// {
-//     // update snake head/body and food
-//     end_node->pos.x = end_x;
-//     end_node->pos.y = end_y;
-// }
-
 // sort by f then pop Node have lowest f
+// always reseach -> g = 0, f = g + h = h
 Node* RoutePlanner::NextNode()
 {
     std::sort(open_list.begin(), open_list.end(),[](Node* node1, Node* node2)->bool {
@@ -148,7 +138,6 @@ Node* RoutePlanner::NextNode()
 
     Node* retNode = open_list.back();
     open_list.pop_back();   
-    // open_list.clear();   
       
     return retNode;
 }
@@ -160,23 +149,14 @@ void RoutePlanner::AStarSearch(Controller* controller, SDL_Point goal)
     start_node->pos.x = static_cast<int>(snake->head_x);
     start_node->pos.y = static_cast<int>(snake->head_y);
     end_node->pos = goal;
-    // TODO: Implement your solution here.
-    // initialize explicit start node value
-    // start_node->parent = nullptr;
-    // start_node->g_value = 0;
-    // start_node->h_value = CalculateHValue(start_node);
 
     open_list.emplace_back(start_node);
     current_node = start_node;
 
-    // while(open_list.size() > 0)
     if(open_list.size() > 0)
     {   
-
         if(start_node == end_node)
         {
-            // update snake
-            // update();
             return;
         }
         AddNeighbors(start_node, controller);

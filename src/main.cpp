@@ -13,22 +13,14 @@ int main() {
   int kW = kScreenWidth/kGridWidth;
 
   std::vector<Obstacle*> obs;
-  // obs.emplace_back(new Obstacle(0,0, 100,100));
   obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
   obs.emplace_back(new Obstacle(2 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  // auto controller = new UserController();
-  // auto controller = new ProcessController();
-  // auto snake = std::make_shared<Snake>(kGridWidth, kGridHeight);
 
   Game game(kGridWidth, kGridHeight, obs);
-
-  // game.Run(static_cast<Controller*> (controller) ,snake, renderer, kMsPerFrame);
   game.Run(renderer, kMsPerFrame);
   
-  // create an other thread for other snake
-
   std::cout << "Game has terminated successfully!\n";
 
   // std::cout << "Score: " << game.GetScore() << "\n";

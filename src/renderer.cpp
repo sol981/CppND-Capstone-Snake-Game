@@ -55,7 +55,6 @@ void Renderer::Render(std::vector<std::shared_ptr<Snake>> snakes, food const &fd
   }
 
   // Render food
-  // SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
   if(fd.type == TYPE::SMALL)
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
   else

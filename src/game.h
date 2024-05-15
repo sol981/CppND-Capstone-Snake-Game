@@ -89,18 +89,12 @@ private:
 class Game {
  public:
   Game(std::size_t grid_width, std::size_t grid_height, std::vector<Obstacle*> obs);
-//   void Run(Controller* controller, std::shared_ptr<Snake> snake, Renderer &renderer,
-//            std::size_t target_frame_duration);
   void Run(Renderer &renderer, std::size_t target_frame_duration);
   int GetScore() const;
   // int GetSize() const;
-//   void genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs);
  private:
-//   std::vector<std::vector<State>> board;//(grid_height, std::vector<State>(grid_width, State::kEmpty));
   std::vector<std::shared_ptr<Snake>> snakes; // use unique pointer
   std::vector<std::shared_ptr<Controller>> controllers;
-  // Snake snake;
-  // Snake snake2;
   RoutePlanner* router = nullptr;
   food fd;
   std::vector<Obstacle*> obs;

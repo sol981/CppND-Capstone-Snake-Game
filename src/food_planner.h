@@ -21,7 +21,6 @@ const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 struct Node
 {
   int h_value = std::numeric_limits<int>::max();
-  // int g_value = 0;
   Node(){}
   Node(SDL_Point pos) {
     this->pos = pos; 
@@ -50,22 +49,21 @@ class RoutePlanner {
 
     // check cell valid
     bool checkCellValid(int x, int y);
-
+    
     // Add public variables or methods declarations here.
     void AStarSearch(Controller* controller, SDL_Point goal);
-
+    
     // add neighbors to open_list
     void AddNeighbors(Node *current_node, Controller* controller);
+    
     // caluculate h value to know how far the the node to goal
     int CalculateHValue(Node const *node);
     int CalculateHValue(int x, int y);
-    // update position of head snake & position of food
-    // void update(int head_x,int head_y, int end_x, int end_y);
+    
     // sort by f then pop Node have lowest f
     Node *NextNode();
 
   private:
-    // Add private variables or methods declarations here.
     std::shared_ptr<Snake> snake;
     std::vector<Node*> open_list;
     Controller* controller;

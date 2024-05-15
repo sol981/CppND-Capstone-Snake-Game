@@ -117,7 +117,6 @@ void Game::PlaceFood() {
       {
         fd.type = TYPE::SMALL;
       }
-      
       return;
     }
   }
