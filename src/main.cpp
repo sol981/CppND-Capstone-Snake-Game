@@ -13,12 +13,12 @@ int main() {
   int kW = kScreenWidth/kGridWidth;
   
   int level{0};
-  std::cout << "choose level 0 - easy, 1 - medium, 2 - hard:\n";
+  std::cout << "Choose level 0 - easy, 1 - medium, 2 - hard:\n";
   std::cin >> level;
   
   std::vector<Obstacle*> obs;
-  obs.emplace_back(new Obstacle(1 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
-  obs.emplace_back(new Obstacle(2 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
+  obs.emplace_back(new Obstacle(0 * kW,1 * kW, 6 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
+  obs.emplace_back(new Obstacle(0 * kW,12 * kW, 8 * kW,6 * kW)); // 20 = kScreenWidth/kGridWidth 0-32
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
 
@@ -27,30 +27,30 @@ int main() {
   
   std::cout << "Game has terminated successfully!\n";
 
-  // std::cout << "Score: " << game.GetScore() << "\n";
-  // std::cout << "Size: " << game.GetSize() << "\n";
-  HighScore h;
-  // if(game.GetScore() >= h.get() && game.GetScore() > 0)
-  // int saveScore = h.get();
+  std::cout << "Score: " << game.GetScore() << "\n";
+  std::cout << "Size: " << game.GetSize() << "\n";
+  int highestScore{0};
+  { 
+    HighScore h;
+    highestScore = h.getScore();
+  }
   
-  // if(saveScore <= game.GetScore() && game.GetScore() > 0)
-  // {
-  //   std::cout << "true: \ngame now: " << game.GetScore() << "\n";
-  //   std::cout << "in file: " << saveScore << "\n";
-    std::cout<<"you get high score, please enter your name:\n";
+  HighScore h;
+  if(highestScore <= game.GetScore() && game.GetScore() > 0)
+  {
     std::string name;
+    std::cout <<"the highest score: " << highestScore << "\n";
+    std::cout<<"however you are better, you are the best now  !!!! please enter your name:\n";
+    
     // name is string without any space
-    // std::getline(std::cin, name);
-    // h.setScore(name, game.GetScore());
+    std::cin >> name;
+    h.setScore(name, game.GetScore());
+  }
 
-    // std::cout << "get score" << h.getScore() << "\n";
-    // std::cout << "name: " << h.players.back().first  << "score " << h.players.back().second;
-
-  // }
-  // else
-  // {
-  //   std::cout << " you are not in high score\n";
-  // }
-  // h.getScore();
+  for(auto ob: obs)
+  {
+    if(ob != nullptr)
+      delete ob;
+  }
   return 0;
 }

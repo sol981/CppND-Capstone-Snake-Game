@@ -2,14 +2,81 @@
 #include <iostream>
 #include "SDL.h"
 
+HighScore::HighScore()
+{
+  if (!std::filesystem::exists("highscore.txt")) {
+      std::ofstream out("highscore.txt");
+      out.close();
+  }
+  file.open("highscore.txt");
+}
+
+HighScore::HighScore(std::string fileName)
+{
+ if (!std::filesystem::exists(fileName)) {
+    std::ofstream out(fileName);
+    out.close();
+  }
+  file.open(fileName);
+}
+
+HighScore::~HighScore()
+{
+  file.close();
+}
+
+int HighScore::getScore()
+{
+  std::lock_guard<std::mutex> lk(mt);
+  file.seekg(0, std::ios::beg);
+  std::string line;
+  int score{0};
+
+  if(file.is_open())
+  {
+      while(std::getline(file, line))
+      {
+          std::string name;
+          std::stringstream stream(line);
+          if(stream >> name >> score)
+              players.push_back(std::make_pair(name,score));
+      }
+      file.flush();
+  }
+  else
+  {
+      std::cout << "fail to get score, can not open file\n";
+      return 0;
+  }
+  if(score > 0)
+      return players.back().second; 
+  else
+      return 0;
+}
+
+void HighScore::setScore(std::string name, int score)
+{
+ std::lock_guard<std::mutex> lk(mt);
+  if(file.is_open())
+  {
+      std::string str = name + " " + std::to_string(score) + "\n";
+      file.seekp(0, std::ios::beg);
+      file << str;
+      file.flush();
+  }
+  else
+  {
+      std::cout << "can not open file to set score\n";
+  }
+}
+
 Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacle*> obs, LEVEL level)
-    :
+    : obs(obs),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)), obs(obs) {
+      random_h(0, static_cast<int>(grid_height - 1)) {
       this->grid_height = grid_height;
       this->grid_width = grid_width;
-      this->obs = obs;
       this->level = level;
       // user player
       controllers.emplace_back(std::make_shared<UserController>());
@@ -23,28 +90,11 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacl
       router = new RoutePlanner(snakes[1],fd.fruit.x, fd.fruit.y, grid_width, grid_height, obs);
 }
 
-// void Game::genBoardGame(int grid_width,int grid_height, std::vector<Obstacle*> obs)
-// {
-//   board.resize(grid_height);
-//   for (int i = 0; i < grid_height; ++i) {
-//     board[i].resize(grid_width, State::kEmpty);
-//   }
-//   for(auto obstacle : obs)
-//   {
-//     // std::cout << "jdjdjdj\n";
-//     for(int i = 0;i <= grid_height;i++)
-//     {
-//       for(int j = 0;j <= grid_width;j++)
-//       {
-//         if ((obstacle->ob.x * 0.05 <= i) && (i <= (obstacle->ob.x + obstacle->ob.w) * 0.05) &&
-//             (obstacle->ob.y * 0.05 <= j) && (j <= (obstacle->ob.y + obstacle->ob.h) * 0.05)) 
-//         {
-//           board[j][i] = State::kObstacle;
-//         }
-//       }
-//     }
-//   }
-// }
+Game::~Game()
+{
+  if(router != nullptr)
+    delete router;
+}
 
 void Game::Run(Renderer &renderer, std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -68,14 +118,10 @@ void Game::Run(Renderer &renderer, std::size_t target_frame_duration) {
     // Input, Update, Render - the main game loop.
     controllers[0]->HandleInput(running, snakes[0], Snake::Direction::kNone);
 
-    // router->AStarSearch(controllers[1].get(), fd.fruit);
     auto snake2 = std::async(&RoutePlanner::AStarSearch, router, controllers[1].get(), fd.fruit);
     snake2.wait();
 
-    // controller->HandleInput(running, *snake[1]);
     Update();
-    // renderer.Render(snake, fd, obs);
-    // auto ren = std::async(&Renderer::Render, &renderer, snake, fd, obs);
     auto ren2 = std::async(&Renderer::Render, &renderer, snakes, fd, obs);
 
     frame_end = SDL_GetTicks();
@@ -112,7 +158,6 @@ void Game::PlaceFood() {
     if ( (!snakes[0]->SnakeCell(x, y)) && (!snakes[1]->SnakeCell(x, y)) && (std::all_of(obs.begin(), obs.end(), [&](const auto& ob) {
         return !ob->ObstacleCell(x, y);})) ) 
     {
-      // board[y][x] = State::kFinish;
       fd.fruit.x = x;
       fd.fruit.y = y;
       if(scores[0] % 5 == 0 && scores[0] != 0 && fd.type == TYPE::SMALL) // use time or lenght of snake, but which snakes ? // multiple fruit ?

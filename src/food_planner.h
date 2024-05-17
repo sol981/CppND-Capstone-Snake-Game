@@ -43,6 +43,7 @@ class RoutePlanner {
     
     //init start node and end node
     RoutePlanner(std::shared_ptr<Snake> snake, int end_x, int end_y, int grid_width, int grid_height, std::vector<Obstacle*> obs);
+    ~RoutePlanner();
     // check direction
     bool checkDirection(int x, int y);
     Snake::Direction getDirection(const SDL_Point& start, const SDL_Point& goal, const SDL_Point& next);

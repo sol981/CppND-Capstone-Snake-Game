@@ -12,6 +12,15 @@ RoutePlanner::RoutePlanner(std::shared_ptr<Snake> snake, int end_x, int end_y, i
     end_node = new Node(end_x, end_y);
     this->obs = obs;
 }
+
+RoutePlanner::~RoutePlanner()
+{
+    if(start_node != nullptr)
+        delete start_node;
+    if(end_node != nullptr)
+        delete end_node;
+}
+
 // check snake go right direction 
 bool RoutePlanner::checkDirection(int x, int y)
 {
