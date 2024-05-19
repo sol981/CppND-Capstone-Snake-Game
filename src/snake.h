@@ -6,13 +6,13 @@
 
 class Snake {
  public:
-  enum class Direction { kUp, kDown, kLeft, kRight };
+  enum class Direction { kUp, kDown, kLeft, kRight, kNone };
 
   Snake(int grid_width, int grid_height)
-      : grid_width(grid_width),
-        grid_height(grid_height),
-        head_x(grid_width / 2),
-        head_y(grid_height / 2) {}
+      : head_x(grid_width / 2),
+        head_y(grid_height / 2),
+        grid_width(grid_width),
+        grid_height(grid_height) {}
 
   void Update();
 
@@ -21,7 +21,7 @@ class Snake {
 
   Direction direction = Direction::kUp;
 
-  float speed{0.1f};
+  float speed{0.08f};
   int size{1};
   bool alive{true};
   float head_x;

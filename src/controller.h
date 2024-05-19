@@ -2,14 +2,28 @@
 #define CONTROLLER_H
 
 #include "snake.h"
+#include <memory>
 
 class Controller {
  public:
-  void HandleInput(bool &running, Snake &snake) const;
-
- private:
-  void ChangeDirection(Snake &snake, Snake::Direction input,
+  virtual void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir) = 0;
+ protected:
+  void ChangeDirection(std::shared_ptr<Snake> snake, Snake::Direction input,
                        Snake::Direction opposite) const;
+};
+
+class UserController : public Controller
+{
+public:
+    UserController() = default;
+    void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir);
+};
+
+class ProcessController : public Controller
+{
+public:
+    ProcessController() = default;
+    void HandleInput(bool &running, std::shared_ptr<Snake> snake, Snake::Direction dir);
 };
 
 #endif
