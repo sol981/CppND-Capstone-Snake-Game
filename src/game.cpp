@@ -2,9 +2,11 @@
 #include <iostream>
 #include "SDL.h"
 
+namespace fs = std::experimental::filesystem;
+
 HighScore::HighScore()
 {
-  if (!std::filesystem::exists("highscore.txt")) {
+  if (!fs::exists("highscore.txt")) {
       std::ofstream out("highscore.txt");
       out.close();
   }
@@ -13,7 +15,7 @@ HighScore::HighScore()
 
 HighScore::HighScore(std::string fileName)
 {
- if (!std::filesystem::exists(fileName)) {
+ if (!fs::exists(fileName)) {
     std::ofstream out(fileName);
     out.close();
   }
