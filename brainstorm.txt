@@ -1,0 +1,93 @@
+controller
+- should i create an instance in stack or heap
+let place it at stack first.
+- gameboard control it instead of user
+(set user name snake for control)
+- use sdl lib for read keyboard
+- pass snake as reference then update its varibale: direction
+- yeah, you can use a thread to control this 
+analysis change direction:
+ChangeDirection(Snake &snake, Snake::Direction input, Snake::Direction opposite)
+
+- snake passed as reference
+- 3 direction here: now, future (input), not permit 
+- if size = 1 -> can do it
+
+-> so, create condition to change direction
++ size == 1 -> do not care not permiss: now.dir = input
+or
++ now.dir != not permiss -> now.dir = input
+if (size == 1 || now.dir != not permiss) now.dir - input
+
+----------------
+snake
+- attribute:
+size, speed, alive, head_x,y, vector<SDL_point> body, growing, grid_width, grid_heigh
+
+? why there is not score
+A: game control this variable for all snake not snake
+? growing
+- send to snake to update size (use async & notify_variable)
+
+? grid_width, grid_heigh
+A:  game grid (head, body must inside this)
+it difference with screen size 
+
+unit for game:
++ pixel - screen
++ logical unit: tiles/cell - grid
++ real: meter/feet 
+? update head: set limitation in this scope
+fmod(head_x + grid_width, grid_width);
+
+- update head, and body 
+add previous head to body then check growth & dead by collise with its body
+TODO: update object collision
+
+- method:
++ constructor
++ GrowBody
++ Update: updateHead -> updateBody
++ Snakecell to check ocupies of snake
+
+
+---------------
+renderer
+attribute:
+- scredd, grid
+window, render- 
+
+- method
++ constructor: 
++ render
+clear screen
+render food * bloch (axis + size)
+render snake body
+set color
+render snake head
+update screen
+? 1 block = screen/ grid
+
++ UpdateWindowTitle()
+
+--- game
+attribute
+- score, snake, food 
+
+! std::random_device dev;
+std::mt19937 engine;
+std::uniform_int_distribution<int> random_w;
+std::uniform_int_distribution<int> random_h;
+-> generate random number: dev -> engine -> random in range -> number
+
+
+method:
+x update()
+x placefood()
+x GetScore()
+x GetSize()
+x run()
+---
+actually, do not need to use async for place food because it too simple and step by step (? rethink later)
+multiple fruit, okay: but later because it is not important
+
