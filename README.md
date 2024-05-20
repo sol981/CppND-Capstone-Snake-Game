@@ -91,10 +91,6 @@ There are 2 obstacles in the board game, you should avoid it when control snake 
     - file render.cpp method ~Renderer() 
     - file game.cpp method ~Game() line 93
 
-* The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
-    - file game.cpp, class HighScore: method contructor and destructor manage open and close file. 
-    - use file stream which has RAII
-
 * The project uses smart pointers instead of raw pointers.
     - file game.h, vector snakes at line 47, vector controllers at line 48
     - file renderer.h method Render() at line 16
@@ -103,6 +99,6 @@ There are 2 obstacles in the board game, you should avoid it when control snake 
 * The project uses multithreading.
     - file game.cpp: line 121 use another task to search path for process controller, line 125 start render at another thread.
 * A mutex or lock is used in the project.
-    - file game.cpp line 30, line 59
+    - file game.cpp line 10, line 22
 
  

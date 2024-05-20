@@ -21,21 +21,11 @@
 
 enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 
-class HighScore
+namespace HighScore
 {
-public:
-    HighScore();
-    HighScore(std::string fileName);
-    ~HighScore();
-    
-    void setScore(std::string name, int score);
-    int getScore();
-    
-    std::vector<std::pair<std::string, int>> players;
-private:
-    std::fstream file;
-    std::mutex mt;
-};
+    void saveHighScore(std::string name, int newScore);
+    int loadHighScore();
+}
 
 class Game {
  public:

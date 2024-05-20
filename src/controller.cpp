@@ -61,5 +61,7 @@ void ProcessController::HandleInput(bool &running, std::shared_ptr<Snake> snake,
       ChangeDirection(snake, Snake::Direction::kRight,
                       Snake::Direction::kLeft);
       break;
+    case Snake::Direction::kNone:
+      break;
   }
 }
