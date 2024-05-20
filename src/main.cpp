@@ -27,24 +27,19 @@ int main() {
   
   std::cout << "Game has terminated successfully!\n";
 
-  std::cout << "Score: " << game.GetScore() << "\n";
-  std::cout << "Size: " << game.GetSize() << "\n";
   int highestScore{0};
-  { 
-    HighScore h;
-    highestScore = h.getScore();
-  }
-  
-  HighScore h;
+  highestScore = HighScore::loadHighScore();
+  std::cout << "Score: " << game.GetScore() << " highese score: " << highestScore << "\n";
+  std::cout << "Size: " << game.GetSize() << "\n";
   if(highestScore <= game.GetScore() && game.GetScore() > 0)
   {
-    std::string name;
+    std::string name{"playerx"};
     std::cout <<"the highest score: " << highestScore << "\n";
     std::cout<<"however you are better, you are the best now  !!!! please enter your name:\n";
     
     // name is string without any space
     std::cin >> name;
-    h.setScore(name, game.GetScore());
+    HighScore::saveHighScore(name, game.GetScore());
   }
 
   for(auto ob: obs)

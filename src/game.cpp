@@ -1,75 +1,37 @@
 #include "game.h"
 #include <iostream>
 #include "SDL.h"
+#include "SDL.h" 
 
-namespace fs = std::experimental::filesystem;
+std::mutex mt;
+const std::string HIGH_SCORE_FILE = "highscore.txt";
 
-HighScore::HighScore()
-{
-  if (!fs::exists("highscore.txt")) {
-      std::ofstream out("highscore.txt");
-      out.close();
-  }
-  file.open("highscore.txt");
-}
+void HighScore::saveHighScore(std::string name, int newScore) {
+        std::lock_guard<std::mutex> lock(mt);
+        std::ofstream file(HIGH_SCORE_FILE);
+        if (file.is_open()) {
+            file << name << " " <<newScore << std::endl;
+            file.close();
+            std::cout << "High score saved!" << std::endl;
+        } else {
+            std::cerr << "Error saving high score!" << std::endl;
+        }
+    }
 
-HighScore::HighScore(std::string fileName)
-{
- if (!fs::exists(fileName)) {
-    std::ofstream out(fileName);
-    out.close();
-  }
-  file.open(fileName);
-}
-
-HighScore::~HighScore()
-{
-  file.close();
-}
-
-int HighScore::getScore()
-{
-  std::lock_guard<std::mutex> lk(mt);
-  file.seekg(0, std::ios::beg);
-  std::string line;
-  int score{0};
-
-  if(file.is_open())
-  {
-      while(std::getline(file, line))
-      {
-          std::string name;
-          std::stringstream stream(line);
-          if(stream >> name >> score)
-              players.push_back(std::make_pair(name,score));
-      }
-      file.flush();
-  }
-  else
-  {
-      std::cout << "fail to get score, can not open file\n";
-      return 0;
-  }
-  if(score > 0)
-      return players.back().second; 
-  else
-      return 0;
-}
-
-void HighScore::setScore(std::string name, int score)
-{
- std::lock_guard<std::mutex> lk(mt);
-  if(file.is_open())
-  {
-      std::string str = name + " " + std::to_string(score) + "\n";
-      file.seekp(0, std::ios::beg);
-      file << str;
-      file.flush();
-  }
-  else
-  {
-      std::cout << "can not open file to set score\n";
-  }
+int HighScore::loadHighScore() {
+    std::lock_guard<std::mutex> lock(mt);
+    std::ifstream file(HIGH_SCORE_FILE);
+    if (file.is_open()) {
+        int score{0};
+        std::string name;
+        file >> name >> score;
+        file.close();
+        return score;
+    } else {
+        // Handle case where file doesn't exist or can't be read
+        std::cout << "No high score found. Starting fresh!" << std::endl;
+        return 0;  // Or any default value
+    }
 }
 
 Game::Game(std::size_t grid_width, std::size_t grid_height,  std::vector<Obstacle*> obs, LEVEL level)
